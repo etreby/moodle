@@ -4492,7 +4492,7 @@ class admin_setting_sitesetselect extends admin_setting_configselect {
         if ($SITE->id == $COURSE->id) {
             $COURSE = $SITE;
         }
-        format_base::reset_course_cache($SITE->id);
+        core_course\course_format::reset_course_cache($SITE->id);
 
         return '';
 
@@ -4703,7 +4703,7 @@ class admin_setting_sitesetcheckbox extends admin_setting_configcheckbox {
         if ($SITE->id == $COURSE->id) {
             $COURSE = $SITE;
         }
-        format_base::reset_course_cache($SITE->id);
+        core_course\course_format::reset_course_cache($SITE->id);
 
         return '';
     }
@@ -4785,7 +4785,7 @@ class admin_setting_sitesettext extends admin_setting_configtext {
         if ($SITE->id == $COURSE->id) {
             $COURSE = $SITE;
         }
-        format_base::reset_course_cache($SITE->id);
+        core_course\course_format::reset_course_cache($SITE->id);
 
         return '';
     }
@@ -4837,7 +4837,7 @@ class admin_setting_special_frontpagedesc extends admin_setting_confightmleditor
         if ($SITE->id == $COURSE->id) {
             $COURSE = $SITE;
         }
-        format_base::reset_course_cache($SITE->id);
+        core_course\course_format::reset_course_cache($SITE->id);
 
         return '';
     }
@@ -10394,91 +10394,6 @@ class admin_setting_managewebserviceprotocols extends admin_setting {
         return highlight($query, $return);
     }
 }
-
-
-/**
- * Special class for web service token administration.
- *
- * @author Jerome Mouneyrac
- */
-class admin_setting_managewebservicetokens extends admin_setting {
-
-    /**
-     * Calls parent::__construct with specific arguments
-     */
-    public function __construct() {
-        $this->nosave = true;
-        parent::__construct('webservicestokenui', get_string('managetokens', 'webservice'), '', '');
-    }
-
-    /**
-     * Always returns true, does nothing
-     *
-     * @return true
-     */
-    public function get_setting() {
-        return true;
-    }
-
-    /**
-     * Always returns true, does nothing
-     *
-     * @return true
-     */
-    public function get_defaultsetting() {
-        return true;
-    }
-
-    /**
-     * Always returns '', does not write anything
-     *
-     * @return string Always returns ''
-     */
-    public function write_setting($data) {
-    // do not write any setting
-        return '';
-    }
-
-    /**
-     * Builds the XHTML to display the control
-     *
-     * @param string $data Unused
-     * @param string $query
-     * @return string
-     */
-    public function output_html($data, $query='') {
-        global $CFG, $OUTPUT;
-
-        require_once($CFG->dirroot . '/webservice/classes/token_table.php');
-        $baseurl = new moodle_url('/' . $CFG->admin . '/settings.php?section=webservicetokens');
-
-        $return = $OUTPUT->box_start('generalbox webservicestokenui');
-
-        if (has_capability('moodle/webservice:managealltokens', context_system::instance())) {
-            $return .= \html_writer::div(get_string('onlyseecreatedtokens', 'webservice'));
-        }
-
-        $table = new \webservice\token_table('webservicetokens');
-        $table->define_baseurl($baseurl);
-        $table->attributes['class'] = 'admintable generaltable'; // Any need changing?
-        $table->data  = array();
-        ob_start();
-        $table->out(10, false);
-        $tablehtml = ob_get_contents();
-        ob_end_clean();
-        $return .= $tablehtml;
-
-        $tokenpageurl = "$CFG->wwwroot/$CFG->admin/webservice/tokens.php?sesskey=" . sesskey();
-
-        $return .= $OUTPUT->box_end();
-        // add a token to the table
-        $return .= "<a href=\"".$tokenpageurl."&amp;action=create\">";
-        $return .= get_string('add')."</a>";
-
-        return highlight($query, $return);
-    }
-}
-
 
 /**
  * Colour picker

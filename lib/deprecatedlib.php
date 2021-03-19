@@ -918,7 +918,8 @@ function textlib_get_instance() {
  * @deprecated since 2.4
  */
 function get_generic_section_name() {
-    throw new coding_exception('get_generic_section_name() is deprecated. Please use appropriate functionality from class format_base');
+    throw new coding_exception('get_generic_section_name() is deprecated. Please use appropriate functionality '
+            .'from class core_course\\course_format');
 }
 
 /**
@@ -988,8 +989,8 @@ function make_editing_buttons() {
  * @deprecated since 2.5
  */
 function print_section() {
-    throw new coding_exception('Function print_section() is removed. Please use course renderer function '.
-            'course_section_cm_list() instead.');
+    throw new coding_exception('Function print_section() is removed. Please use core_course\output\section_format '.
+            ' to render a course section instead.');
 }
 
 /**
@@ -3284,7 +3285,7 @@ function user_get_total_participants($courseid, $groupid = 0, $accesssince = 0, 
  * @param int $limitnum return a subset comprising this many records (optional, required if $limitfrom is set).
  * @return moodle_recordset
  */
-function user_get_participants($courseid, $groupid = 0, $accesssince, $roleid, $enrolid = 0, $statusid, $search,
+function user_get_participants($courseid, $groupid, $accesssince, $roleid, $enrolid, $statusid, $search,
                                $additionalwhere = '', $additionalparams = array(), $sort = '', $limitfrom = 0, $limitnum = 0) {
     global $DB;
 

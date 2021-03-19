@@ -5011,9 +5011,7 @@ function delete_course($courseorid, $showfeedback = true) {
     $DB->delete_records("course_format_options", array("courseid" => $courseid));
 
     // Reset all course related caches here.
-    if (class_exists('format_base', false)) {
-        format_base::reset_course_cache($courseid);
-    }
+    core_course\course_format::reset_course_cache($courseid);
 
     // Tell search that we have deleted the course so it can delete course data from the index.
     \core_search\manager::course_deleting_finish($courseid);
@@ -10428,7 +10426,7 @@ class lang_string {
         // changes are not carried across.
         // To do this we always ensure $a or its properties/values are strings
         // and that any properties/values that arn't convertable are forgotten.
-        if (!empty($a)) {
+        if ($a !== null) {
             if (is_scalar($a)) {
                 $this->a = $a;
             } else if ($a instanceof lang_string) {

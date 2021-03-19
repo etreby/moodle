@@ -2442,9 +2442,7 @@ function calendar_get_default_courses($courseid = null, $fields = '*', $canmanag
         $prefixedfields = array_map(function($value) {
             return 'c.' . trim(strtolower($value));
         }, $fieldlist);
-        if (!in_array('c.visible', $prefixedfields) && !in_array('c.*', $prefixedfields)) {
-            $prefixedfields[] = 'c.visible';
-        }
+
         $courses = get_courses('all', 'c.shortname', implode(',', $prefixedfields));
     } else {
         $courses = enrol_get_users_courses($userid, true, $fields);
@@ -2880,7 +2878,7 @@ function calendar_add_subscription($sub) {
  * @throws dml_exception A DML specific exception is thrown for invalid subscriptionids.
  * @return int Code: CALENDAR_IMPORT_EVENT_UPDATED = updated,  CALENDAR_IMPORT_EVENT_INSERTED = inserted, 0 = error
  */
-function calendar_add_icalendar_event($event, $unused = null, $subscriptionid, $timezone='UTC') {
+function calendar_add_icalendar_event($event, $unused, $subscriptionid, $timezone='UTC') {
     global $DB;
 
     // Probably an unsupported X-MICROSOFT-CDO-BUSYSTATUS event.
