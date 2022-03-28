@@ -1,0 +1,71 @@
+version: '3.8'
+services:
+
+    mariadb:
+        image: mariadb:10.5.15
+        restart: always
+        volumes:
+            - ./Database:/var/lib/mysql
+        environment:
+            - MYSQL_ROOT_PASSWORD=moodle
+            - MYSQL_ROOT_USER=root
+            - MYSQL_DATABASE=moodle
+        networks:
+            - backend
+  
+    phpmyadmin:
+        ports:
+            - 8081:80
+        environment:
+            PMA_HOSTS: mariadb
+            PMA_CONTROLUSER: root
+            PMA_PORTS: 3306
+            MYSQL_ROOT_PASSWORD: moodle
+        tty: true
+        image: phpmyadmin/phpmyadmin
+        stdin_open: true
+        networks:
+            - backend
+            - frontend
+        depends_on:
+            - mariadb
+        links:
+            - mariadb:mariadb
+    
+    moodle:
+        image: etreby/docker-39_moodle:0.1
+        ports:
+            - 8433:80
+        environment:
+            - TZ=Etc/UTC
+            - MOODLE_DATA=/var/www/moodledata
+            - COMPOSE_PROJECT_NAME=mood1e
+            - LANG=en
+            - SITENAME=comprehendDemo
+            - SHORTNAME=demo
+            - MOODLE_VERSION=39
+            - MOODLE_URL=http://localhost:8433
+            - DBTYPE=mariadb
+            - DBHOST=mariadb
+            - DBUSER=root
+            - DBPASS=moodle
+            - DBNAME=moodle
+            - DBPREFIX=mdl_
+            - ADMINUSER=adminuser
+            - ADMINPASS=adminpass
+            - ADMINEMAIL=admin@comprehend.ibm.com
+        entrypoint: [ "/bin/bash", "-c", "sh /var/www/html/postinstall.sh && /usr/sbin/apache2ctl -D FOREGROUND"]
+        volumes:
+            - ./MoodleData:/var/www/moodledata
+        networks:
+            - backend
+            - frontend
+        depends_on:
+            - mariadb
+        links:
+          - mariadb:mariadb
+      
+      
+networks:
+    backend:
+    frontend:
