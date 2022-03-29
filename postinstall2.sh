@@ -143,16 +143,16 @@ func_restartApache2()
 func_create_cron_jobs()
 {
 	echo "making cronJob"
-	crontab -l www-data | grep '/usr/bin/php  /var/www/html/admin/cli/cron.php' 1> /dev/null 2>&1
+	crontab -u www-data -l | grep '/usr/bin/php  /var/www/html/admin/cli/cron.php' 1> /dev/null 2>&1
 	(( $? == 0 )) && exit
-	crontab -l www-data > /tmp/crontab.tmp
+	crontab -u www-data -l > /tmp/crontab.tmp
 	echo '* * * * * /usr/bin/php  /var/www/html/admin/cli/cron.php 2>&1 | /usr/bin/logger' >> /tmp/crontab.tmp
 	echo '* * * * * /usr/bin/php  /var/www/html/admin/cli/cron.php 2>&1 | /usr/bin/logger' >> /tmp/crontab.tmp
 	echo '* * * * * /usr/bin/php  /var/www/html/admin/cli/cron.php 2>&1 | /usr/bin/logger' >> /tmp/crontab.tmp
 	echo ' * * * * * /usr/bin/php  /var/www/html/admin/cli/adhoc_task.php --execute --keep-alive=59' >> /tmp/crontab.tmp
 	echo ' * * * * * /usr/bin/php  /var/www/html/admin/cli/adhoc_task.php --execute --keep-alive=59' >> /tmp/crontab.tmp
 	echo ' * * * * * /usr/bin/php  /var/www/html/admin/cli/adhoc_task.php --execute --keep-alive=59' >> /tmp/crontab.tmp
-	crontab -e www-data /tmp/crontab.tmp
+	crontab -e -u www-data /tmp/crontab.tmp
 	rm /tmp/crontab.tmp
 	echo 'check system'
 	php /var/www/html/admin/cli/checks.php

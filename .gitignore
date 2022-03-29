@@ -6,6 +6,8 @@
 ./Moodle/*
 ./Moodle/*.*
 ./.idea
+./.idea/*.xml
+./.idea/*.iml
 ./.idea/*
 ./.idea/*.*
 ./.vscode

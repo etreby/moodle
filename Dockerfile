@@ -90,7 +90,7 @@ DEBIAN_FRONTEND=noninteractive TZ=${TZ} apt-get -y install tzdata\
  ln -sf /dev/stderr /var/log/apache2/error.log && \
  apt-get clean && \
  echo "opcache.enable = 1" >> /etc/php/7.4/mods-available/opcache.ini && \
- echo "opcache.memory_consumption = 128" >> /etc/php/7.4/mods-available/opcache.ini && \
+ echo "opcache.memory_consumption = 512" >> /etc/php/7.4/mods-available/opcache.ini && \
  echo "opcache.max_accelerated_files = 10000" >> /etc/php/7.4/mods-available/opcache.ini && \
  echo "opcache.revalidate_freq = 60" >> /etc/php/7.4/mods-available/opcache.ini && \
  echo "; Required for Moodle" >> /etc/php/7.4/mods-available/opcache.ini && \
@@ -111,7 +111,13 @@ DEBIAN_FRONTEND=noninteractive TZ=${TZ} apt-get -y install tzdata\
  sed -i 's/max_input_vars = .*/max_input_vars = 3000/' /etc/php/7.4/cli/php.ini && \
  sed -i 's/post_max_size = .*/post_max_size = 500M/' /etc/php/7.4/cli/php.ini && \
  sed -i 's/upload_max_filesize = .*/upload_max_filesize = 500M/' /etc/php/7.4/cli/php.ini && \
- service apache2 restart
+ sed -i 's/memory_limit = .*/memory_limit = 512M/' /etc/php/7.4/apache2/php.ini && \
+ sed -i 's/max_execution_time = .*/max_execution_time = 1800/' /etc/php/7.4/apache2/php.ini && \
+ sed -i 's/max_input_time = .*/max_input_time = 120/' /etc/php/7.4/apache2/php.ini && \
+ sed -i 's/max_input_vars = .*/max_input_vars = 3000/' /etc/php/7.4/apache2/php.ini && \
+ sed -i 's/post_max_size = .*/post_max_size = 500M/' /etc/php/7.4/apache2/php.ini && \
+ sed -i 's/upload_max_filesize = .*/upload_max_filesize = 500M/' /etc/php/7.4/apache2/php.ini && \
+ service apache2 start
 
 COPY config.comprehend.php postinstall2.sh /opt/
 RUN vim /opt/postinstall2.sh -c "set ff=unix" -c ":wq" && \
@@ -123,4 +129,4 @@ mkdir -p ${MOODLE_DATA} && \
   && echo "source /root/postinstall.sh" >> /root/.bashrc && \
   source /root/.bashrc
 
-ENTRYPOINT ["tail", "-f", "/dev/null"]
+CMD ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
