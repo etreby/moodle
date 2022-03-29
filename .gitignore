@@ -13,9 +13,6 @@
 ./.vscode
 ./.vscode/*
 ./.vscode/*.*
-./conf
-./conf/*
-./conf/*.*
 /.vscode/
 /Database/
 /Moodle/

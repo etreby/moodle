@@ -49,7 +49,7 @@ services:
             - SHORTNAME=demo
             - MOODLE_VERSION=39
             - MOODLE_URL=http://localhost:8433
-            - DBTYPE=mariadb
+            - DBTYPE=mysqli
             - DBHOST=mariadb
             - DBUSER=root
             - DBPASS=moodle
