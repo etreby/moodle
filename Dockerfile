@@ -74,6 +74,7 @@ DEBIAN_FRONTEND=noninteractive TZ=${TZ} apt-get -y install tzdata\
  php7.4-xmlrpc\
  php7.4-ldap\
  php7.4-zip\
+ php7.4-apcu\
  php7.4-soap\
  php7.4-mbstring\
  git\
@@ -89,6 +90,7 @@ DEBIAN_FRONTEND=noninteractive TZ=${TZ} apt-get -y install tzdata\
  ln -sf /dev/stdout /var/log/apache2/access.log && \
  ln -sf /dev/stderr /var/log/apache2/error.log && \
  apt-get clean && \
+ echo 'apc.enable_cli = On' >> /etc/php/7.4/mods-available/apcu.ini && \
  echo "opcache.enable = 1" >> /etc/php/7.4/mods-available/opcache.ini && \
  echo "opcache.memory_consumption = 512" >> /etc/php/7.4/mods-available/opcache.ini && \
  echo "opcache.max_accelerated_files = 10000" >> /etc/php/7.4/mods-available/opcache.ini && \
@@ -127,6 +129,9 @@ mkdir -p ${MOODLE_DATA} && \
  cp /opt/postinstall2.sh /root/postinstall.sh && \
  touch /root/.bashrc \
   && echo "source /root/postinstall.sh" >> /root/.bashrc && \
+  echo "alias ls='ls --color=auto'" >> /root/.bashrc && \
+  echo "alias ll='ls -alF'" >> /root/.bashrc && \
+  echo "alias comprehend='bash /root/postinstall.sh'" >> /root/.bashrc && \
   source /root/.bashrc
 
 CMD ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]

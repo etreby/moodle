@@ -149,11 +149,12 @@ func_create_cron_jobs()
 	echo '* * * * * /usr/bin/php  /var/www/html/admin/cli/cron.php 2>&1 | /usr/bin/logger' >> /tmp/crontab.tmp
 	echo '* * * * * /usr/bin/php  /var/www/html/admin/cli/cron.php 2>&1 | /usr/bin/logger' >> /tmp/crontab.tmp
 	echo '* * * * * /usr/bin/php  /var/www/html/admin/cli/cron.php 2>&1 | /usr/bin/logger' >> /tmp/crontab.tmp
-	echo ' * * * * * /usr/bin/php  /var/www/html/admin/cli/adhoc_task.php --execute --keep-alive=59' >> /tmp/crontab.tmp
-	echo ' * * * * * /usr/bin/php  /var/www/html/admin/cli/adhoc_task.php --execute --keep-alive=59' >> /tmp/crontab.tmp
-	echo ' * * * * * /usr/bin/php  /var/www/html/admin/cli/adhoc_task.php --execute --keep-alive=59' >> /tmp/crontab.tmp
-	crontab -e -u www-data /tmp/crontab.tmp
+	echo '* * * * * /usr/bin/php  /var/www/html/admin/cli/adhoc_task.php --execute --keep-alive=59' >> /tmp/crontab.tmp
+	echo '* * * * * /usr/bin/php  /var/www/html/admin/cli/adhoc_task.php --execute --keep-alive=59' >> /tmp/crontab.tmp
+	echo '* * * * * /usr/bin/php  /var/www/html/admin/cli/adhoc_task.php --execute --keep-alive=59' >> /tmp/crontab.tmp
+	crontab -u www-data /tmp/crontab.tmp
 	rm /tmp/crontab.tmp
+	service cron start
 	echo 'check system'
 	php /var/www/html/admin/cli/checks.php
 }
@@ -208,7 +209,7 @@ func_ShowStart()
     echo "server tools"
 	elif [ $option -eq 0 ]; then
 		#func_unset_all
-		funcStart
+		red "back to shell!"
 	fi
 }
 func_ShowStart

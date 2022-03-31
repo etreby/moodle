@@ -1,6 +1,8 @@
 #!bin/bash
 docker compose down
+sudo chown -R $USER:$USER .
 rm -Rf ./Moodle/*
 rm -Rf ./MoodleData/*
 rm -Rf ./Database/*
-docker-compose up --build
+docker-compose -f docker-compose-build-MYSQL.yml up --build -d
+echo "done!"
