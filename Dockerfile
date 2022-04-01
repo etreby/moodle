@@ -49,6 +49,8 @@ RUN apt-get update && \
 apt-get -y install locales && \
 sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen && locale-gen && \
 DEBIAN_FRONTEND=noninteractive TZ=${TZ} apt-get -y install tzdata\
+libmemcached11 libmemcachedutil2.2 libmemcachedprotocol1.1 libldap-2.4-2 && \
+
  vim\
  nano\
  figlet\
@@ -74,9 +76,10 @@ DEBIAN_FRONTEND=noninteractive TZ=${TZ} apt-get -y install tzdata\
  php7.4-xmlrpc\
  php7.4-ldap\
  php7.4-zip\
- php7.4-apcu\
+ php-apcu\
  php7.4-soap\
  php7.4-mbstring\
+ php-pear\
  git\
  git-core && \
  mkdir -p /opt/moodlesrc && \
@@ -119,7 +122,7 @@ DEBIAN_FRONTEND=noninteractive TZ=${TZ} apt-get -y install tzdata\
  sed -i 's/max_input_vars = .*/max_input_vars = 3000/' /etc/php/7.4/apache2/php.ini && \
  sed -i 's/post_max_size = .*/post_max_size = 500M/' /etc/php/7.4/apache2/php.ini && \
  sed -i 's/upload_max_filesize = .*/upload_max_filesize = 500M/' /etc/php/7.4/apache2/php.ini && \
- service apache2 start
+ /etc/init.d/apache2 restart
 
 COPY config.comprehend.php postinstall2.sh /opt/
 RUN vim /opt/postinstall2.sh -c "set ff=unix" -c ":wq" && \
