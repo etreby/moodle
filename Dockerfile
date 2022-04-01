@@ -49,8 +49,6 @@ RUN apt-get update && \
 apt-get -y install locales && \
 sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen && locale-gen && \
 DEBIAN_FRONTEND=noninteractive TZ=${TZ} apt-get -y install tzdata\
-libmemcached11 libmemcachedutil2.2 libmemcachedprotocol1.1 libldap-2.4-2 && \
-
  vim\
  nano\
  figlet\
